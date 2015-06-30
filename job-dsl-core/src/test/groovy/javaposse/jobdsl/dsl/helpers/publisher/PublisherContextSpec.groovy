@@ -2667,6 +2667,10 @@ class PublisherContextSpec extends Specification {
     def 'stashNotifier with configuration of all parameters'() {
         when:
         context.stashNotifier {
+            stashServerBaseUrl('url')
+            stashUserName('username')
+            stashUserPassword('password')
+            ignoreUnverifiedSSLPeer(true)
             commitSha1('sha1')
             keepRepeatedBuilds(true)
         }
@@ -2676,10 +2680,10 @@ class PublisherContextSpec extends Specification {
         context.publisherNodes.size() == 1
         with(context.publisherNodes[0]) {
             name() == 'org.jenkinsci.plugins.stashNotifier.StashNotifier'
-            stashServerBaseUrl[0].value().empty
-            stashUserName[0].value().empty
-            stashUserPassword[0].value().empty
-            ignoreUnverifiedSSLPeer[0].value() == false
+            stashServerBaseUrl[0].value() == 'url'
+            stashUserName[0].value() == 'username'
+            stashUserPassword[0].value() == 'password'
+            ignoreUnverifiedSSLPeer[0].value() == true
             commitSha1[0].value() == 'sha1'
             includeBuildNumberInKey[0].value() == true
         }
@@ -2689,6 +2693,10 @@ class PublisherContextSpec extends Specification {
     def 'stashNotifier with configuration of all parameters using defaults for boolean parameter'() {
         when:
         context.stashNotifier {
+            stashServerBaseUrl('url')
+            stashUserName('username')
+            stashUserPassword('password')
+            ignoreUnverifiedSSLPeer()
             commitSha1('sha1')
             keepRepeatedBuilds()
         }
@@ -2698,9 +2706,9 @@ class PublisherContextSpec extends Specification {
         context.publisherNodes.size() == 1
         with(context.publisherNodes[0]) {
             name() == 'org.jenkinsci.plugins.stashNotifier.StashNotifier'
-            stashServerBaseUrl[0].value().empty
-            stashUserName[0].value().empty
-            stashUserPassword[0].value().empty
+            stashServerBaseUrl[0].value() == 'url'
+            stashUserName[0].value() == 'username'
+            stashUserPassword[0].value() == 'password'
             ignoreUnverifiedSSLPeer[0].value() == false
             commitSha1[0].value() == 'sha1'
             includeBuildNumberInKey[0].value() == true
