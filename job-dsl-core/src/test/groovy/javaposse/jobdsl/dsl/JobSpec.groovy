@@ -1085,4 +1085,37 @@ class JobSpec extends Specification {
         }
         1 * jobManagement.requirePlugin('notification')
     }
+
+    def 'github project URL with value'() {
+        when:
+        job.githubProjectUrl('https://github.com/jenkinsci/job-dsl-plugin')
+
+        then:
+        with(job.node.properties[0].'com.coravy.hudson.plugins.github.GithubProjectProperty') {
+            projectUrl[0].value() == 'https://github.com/jenkinsci/job-dsl-plugin'
+        }
+        1 * jobManagement.logPluginDeprecationWarning('github', '1.12.0')
+    }
+
+    def 'github project URL with empty value'() {
+        when:
+        job.githubProjectUrl('')
+
+        then:
+        with(job.node.properties[0].'com.coravy.hudson.plugins.github.GithubProjectProperty') {
+            projectUrl[0].value() == ''
+        }
+        1 * jobManagement.logPluginDeprecationWarning('github', '1.12.0')
+    }
+
+    def 'github project URL with null value'() {
+        when:
+        job.githubProjectUrl(null)
+
+        then:
+        with(job.node.properties[0].'com.coravy.hudson.plugins.github.GithubProjectProperty') {
+            projectUrl[0].value() == null
+        }
+        1 * jobManagement.logPluginDeprecationWarning('github', '1.12.0')
+    }
 }

@@ -591,4 +591,18 @@ abstract class Job extends Item {
     private Node executeEmptyTemplate() {
         new XmlParser().parse(this.class.getResourceAsStream("${this.class.simpleName}-template.xml"))
     }
+
+    /**
+     * Configures the github project URL
+     * @since 1.36
+     */
+    void githubProjectUrl(String projectUrl) {
+        jobManagement.logPluginDeprecationWarning('github', '1.12.0')
+
+        withXmlActions << WithXmlAction.create { Node project ->
+            project / 'properties' / 'com.coravy.hudson.plugins.github.GithubProjectProperty' {
+                delegate.projectUrl projectUrl
+            }
+        }
+    }
 }
